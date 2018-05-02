@@ -1,24 +1,24 @@
 package org.chris.redbud.validator.core;
 
-import org.chris.redbud.validator.annotation.MethodValidate;
-import org.chris.redbud.validator.annotation.Validate;
-import org.chris.redbud.validator.exception.InvalidParameterException;
-import org.chris.redbud.validator.result.ValidError;
-import org.chris.redbud.validator.result.ValidResult;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.chris.redbud.validator.annotation.MethodValidate;
+import org.chris.redbud.validator.annotation.Validate;
+import org.chris.redbud.validator.exception.InvalidParameterException;
+import org.chris.redbud.validator.result.ValidError;
+import org.chris.redbud.validator.result.ValidResult;
 import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.Validator;
@@ -43,7 +43,7 @@ public class MethodValidationAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodValidationAspect.class);
 
-    @Autowired
+    @Resource
     private Validator validator;
 
 
@@ -82,8 +82,7 @@ public class MethodValidationAspect {
             return joinPoint.proceed();
         }
         Class[] groups = new Class[0];
-        LocalValidatorFactoryBean localValidatorFactoryBean = (LocalValidatorFactoryBean) validator;
-        ValidatorImpl validatorImpl = (ValidatorImpl) localValidatorFactoryBean.getValidator();
+        ValidatorImpl validatorImpl = (ValidatorImpl) ((LocalValidatorFactoryBean) validator).getValidator();
         ValidResult validResult = new ValidResult(400);
         Parameter[] parameters = realMethod.getParameters();
         Object[] parameterValues = joinPoint.getArgs();
