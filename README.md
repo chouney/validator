@@ -30,7 +30,7 @@
 方法基本类型校验、Bean类型校验、校验结果获取DEMO如下：
 
 ```
-	//1.HTTP 接口中,ValidResult不需要显示传,默认在参数的最后一位接收
+    //1.HTTP 接口中,ValidResult不需要显示传,默认在参数的最后一位接收
     @MethodValidate
     public void testController1(
     //2.自定义枚举校验,校验传参枚举中的value字段是否包含该值
@@ -60,8 +60,10 @@
     public void showCase(){
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
         Service app = context.getBean("service",Service.class);
+	
         //HTTP 接口中,ValidResult不需要显示传,默认在参数的最后一位接收
         app.testController1(7,1,new ValidResult());
+	
         //如果没有显式声明ValidResult,将抛异常
         try{
             app.testController2(7,1);
